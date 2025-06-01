@@ -1,0 +1,5 @@
+tasks.shadowJar {
+    archiveBaseName = "database-service-plugin"
+    archiveVersion = ''
+    archiveClassifier = ''
+}

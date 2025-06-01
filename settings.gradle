@@ -1,0 +1,13 @@
+buildscript {
+    dependencyResolutionManagement {
+        repositories {
+            mavenCentral()
+            maven {
+                name = 'elmakers-repo'
+                url = 'https://repo.elmakers.com/repository/'
+            }
+        }
+    }
+}
+
+rootProject.name = 'database-service-plugin'

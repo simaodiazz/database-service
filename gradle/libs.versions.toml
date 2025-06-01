@@ -1,0 +1,36 @@
+[versions]
+# Plugins
+spotless = "6.13.0"
+plugin-yaml = '0.6.0'
+shadow = "8.1.1"
+# Minecraft Libraries Versions
+spigot = "1.8.8-R0.1-SNAPSHOT"
+# Database Libraries Versions
+hikari = "4.0.3"
+mysql = "8.0.32"
+h2 = "2.1.214"
+# Json
+gson = "2.10.1"
+
+[libraries]
+# Spigot
+spigot-api = { module = "org.spigotmc:spigot-api", version.ref = "spigot" }
+spigot-nms = { module = "org.spigotmc:spigot", version.ref = "spigot" }
+# Database
+hikari = { module = "com.zaxxer:HikariCP", version.ref = "hikari" }
+mysql = { module = "mysql:mysql-connector-java", version.ref = "mysql" }
+h2 = { module = "com.h2database:h2", version.ref = "h2" }
+# Json
+gson = { module = "com.google.code.gson:gson", version.ref = "gson" }
+
+[plugins]
+# Spotless
+spotless = { id = "com.diffplug.spotless", version.ref = "spotless" }
+# Plugin Yaml
+plugin-yaml = { id = "net.minecrell.plugin-yml.bukkit", version.ref = "plugin-yaml" }
+# Shadow
+shadow = { id = "com.github.johnrengelman.shadow", version.ref = "shadow" }
+
+[bundles]
+spigot = ["spigot-api", "spigot-nms"]
+database = ["hikari", "mysql", "h2"]

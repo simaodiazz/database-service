@@ -1,0 +1,9 @@
+spotless {
+    java {
+        googleJavaFormat('1.5')
+        removeUnusedImports()
+        endWithNewline()
+        trimTrailingWhitespace()
+        indentWithTabs(2)
+    }
+}
