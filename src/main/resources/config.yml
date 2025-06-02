@@ -1,0 +1,6 @@
+database:
+    url: jdbc:h2:mem:database
+    username: sa
+    password: password
+    driver: org.h2.Driver
+    max-pool-size: 10

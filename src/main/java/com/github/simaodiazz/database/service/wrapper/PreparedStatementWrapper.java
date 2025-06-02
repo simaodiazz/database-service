@@ -29,6 +29,15 @@ public class PreparedStatementWrapper implements AutoCloseable {
         }
     }
 
+    public <X, Y> void set(X value, SqlColumnConverter<X, Y> converter) {
+        try {
+            final Y columnValue = converter.convertToColumn(value, this);
+            statement.setObject(1, columnValue);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     public ResultSetWrapper query() {
         try {
             return new ResultSetWrapper(statement.executeQuery());
