@@ -4,11 +4,11 @@ import java.sql.SQLException;
 
 public final class SavepointNotFoundException extends SQLException {
 
-    public SavepointNotFoundException() {
-        super("Savepoint not found");
-    }
+	public SavepointNotFoundException() {
+		super("Savepoint not found");
+	}
 
-    public SavepointNotFoundException(String message) {
-        super(message);
-    }
+	public SavepointNotFoundException(String message) {
+		super(message);
+	}
 }

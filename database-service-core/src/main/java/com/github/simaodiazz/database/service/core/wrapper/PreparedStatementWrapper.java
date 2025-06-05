@@ -2,15 +2,14 @@ package com.github.simaodiazz.database.service.core.wrapper;
 
 public interface PreparedStatementWrapper extends AutoCloseable {
 
-    <T> void setParameter(int parameterIndex, T value);
+	<T> void setParameter(int parameterIndex, T value);
 
-    void addBatch();
+	void addBatch();
 
-    void execute();
+	void execute();
 
-    ResultSetWrapper query();
+	ResultSetWrapper query();
 
-    @Override
-    void close();
-
+	@Override
+	void close();
 }

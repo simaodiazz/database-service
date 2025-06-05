@@ -4,13 +4,13 @@ import java.util.UUID;
 
 public final class UuidSqlColumnConverter implements SqlColumnConverter<UUID, String> {
 
-    @Override
-    public String convertToColumn(UUID uuid) {
-        return uuid.toString();
-    }
+	@Override
+	public String convertToColumn(UUID uuid) {
+		return uuid.toString();
+	}
 
-    @Override
-    public UUID convertToObject(String s) {
-        return UUID.fromString(s);
-    }
+	@Override
+	public UUID convertToObject(String s) {
+		return UUID.fromString(s);
+	}
 }

@@ -1,6 +1,4 @@
 rootProject.name = 'database-service'
 
 include 'database-service-core'
-
-include 'database-service-api'
 include 'database-service-plugin'

@@ -4,7 +4,7 @@ import java.sql.ResultSet;
 
 public final class DefaultResultSetWrapper extends AbstractResultSetWrapper {
 
-    public DefaultResultSetWrapper(ResultSet resultSet) {
-        super(resultSet);
-    }
+	public DefaultResultSetWrapper(ResultSet resultSet) {
+		super(resultSet);
+	}
 }

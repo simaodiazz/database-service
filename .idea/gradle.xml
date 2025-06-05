@@ -9,7 +9,6 @@
         <option name="modules">
           <set>
             <option value="$PROJECT_DIR$" />
-            <option value="$PROJECT_DIR$/database-service-api" />
             <option value="$PROJECT_DIR$/database-service-core" />
             <option value="$PROJECT_DIR$/database-service-plugin" />
           </set>

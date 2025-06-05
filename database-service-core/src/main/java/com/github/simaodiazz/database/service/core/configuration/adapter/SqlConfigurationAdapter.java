@@ -4,6 +4,5 @@ import com.github.simaodiazz.database.service.core.configuration.SqlConfiguratio
 
 public interface SqlConfigurationAdapter<C> {
 
-    SqlConfiguration adapt(C configuration);
-
+	SqlConfiguration adapt(C configuration);
 }

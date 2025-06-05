@@ -1,6 +1,7 @@
 spotless {
     java {
-        googleJavaFormat('1.5')
+        googleJavaFormat()
+        target('database-service-plugin/**/*.java', 'database-service-core/**/*.java')
         removeUnusedImports()
         endWithNewline()
         trimTrailingWhitespace()
