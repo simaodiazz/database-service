@@ -47,16 +47,16 @@ public final class DefaultDataSourceExecutor extends AbstractDataSourceExecutor 
     }
 
     @Override
-    public <T> CompletableFuture<Optional<T>> readAsync(String query, SqlRowAdapter<T> adapter) {
+    public <T> CompletableFuture<Optional<T>> readOptionalAsync(String query, SqlRowAdapter<T> adapter) {
         if (asyncEnabled)
-            return CompletableFuture.supplyAsync(() -> read(query, adapter), executorService);
+            return CompletableFuture.supplyAsync(() -> readOptional(query, adapter), executorService);
         throw new UnsupportedOperationException();
     }
 
     @Override
-    public <T> CompletableFuture<Optional<T>> readAsync(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
+    public <T> CompletableFuture<Optional<T>> readOptionalAsync(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
         if (asyncEnabled)
-            return CompletableFuture.supplyAsync(() -> read(query, adapter, consumer), executorService);
+            return CompletableFuture.supplyAsync(() -> readOptional(query, adapter, consumer), executorService);
         throw new UnsupportedOperationException();
     }
 

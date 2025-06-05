@@ -6,14 +6,14 @@ group = 'com.github.simaodiazz'
 version = '1.0.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+    maven {
+        name = 'elmakers-repo'
+        url = 'https://repo.elmakers.com/repository/'
+    }
 }
 
 dependencies {
-    testImplementation platform('org.junit:junit-bom:5.10.0')
-    testImplementation 'org.junit.jupiter:junit-jupiter'
-}
-
-test {
-    useJUnitPlatform()
+    implementation project(':database-service-core')
+    implementation project(':database-service-api')
+    compileOnly libs.bundles.spigot
 }

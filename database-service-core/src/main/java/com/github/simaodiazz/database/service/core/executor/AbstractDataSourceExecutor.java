@@ -1,7 +1,6 @@
 package com.github.simaodiazz.database.service.core.executor;
 
 import com.github.simaodiazz.database.service.core.adapter.SqlRowAdapter;
-import com.github.simaodiazz.database.service.core.transaction.DefaultSqlTransaction;
 import com.github.simaodiazz.database.service.core.transaction.SqlTransaction;
 import com.github.simaodiazz.database.service.core.wrapper.DataSourceWrapper;
 import com.github.simaodiazz.database.service.core.wrapper.PreparedStatementWrapper;
@@ -44,7 +43,7 @@ public abstract class AbstractDataSourceExecutor implements DataSourceExecutor {
     }
 
     @Override
-    public <T> Optional<T> read(String query, SqlRowAdapter<T> adapter) {
+    public <T> Optional<T> readOptional(String query, SqlRowAdapter<T> adapter) {
         try (SqlConnection connection = source.getConnection()) {
             connection.addModifier(SqlConnectionModifier.READ_ONLY);
             try (PreparedStatementWrapper statement = connection.prepareStatement(query);
@@ -57,7 +56,7 @@ public abstract class AbstractDataSourceExecutor implements DataSourceExecutor {
     }
 
     @Override
-    public <T> Optional<T> read(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
+    public <T> Optional<T> readOptional(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
         try (SqlConnection connection = source.getConnection()) {
             connection.addModifier(SqlConnectionModifier.READ_ONLY);
             try (PreparedStatementWrapper statement = connection.prepareStatement(query);
@@ -133,7 +132,102 @@ public abstract class AbstractDataSourceExecutor implements DataSourceExecutor {
     }
 
     @Override
+    public <T> Optional<T> readTransactionalOptional(String query, SqlRowAdapter<T> adapter) {
+        try (SqlConnection connection = source.getConnection()) {
+            connection.addModifier(SqlConnectionModifier.TRANSACTION);
+            connection.addModifier(SqlConnectionModifier.TRANSACTION_READ_COMMITED);
+            connection.addModifier(SqlConnectionModifier.READ_ONLY);
+            try (SqlTransaction transaction = connection.createTransaction()) {
+                try (PreparedStatementWrapper statement = connection.prepareStatement(query);
+                     ResultSetWrapper resultSet = statement.query()) {
+                    final Optional<T> result = adapter.single(resultSet);
+                    transaction.commit();
+                    return result;
+                } catch (SQLException e) {
+                    transaction.rollback();
+                    throw e;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public <T> Optional<T> readTransactionalOptional(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
+        try (SqlConnection connection = source.getConnection()) {
+            connection.addModifier(SqlConnectionModifier.TRANSACTION);
+            connection.addModifier(SqlConnectionModifier.TRANSACTION_READ_COMMITED);
+            connection.addModifier(SqlConnectionModifier.READ_ONLY);
+            try (SqlTransaction transaction = connection.createTransaction()) {
+                try (PreparedStatementWrapper statement = connection.prepareStatement(query);
+                     ResultSetWrapper resultSet = statement.query()) {
+                    consumer.accept(statement);
+                    final Optional<T> result = adapter.single(resultSet);
+                    transaction.commit();
+                    return result;
+                } catch (SQLException e) {
+                    transaction.rollback();
+                    throw e;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public <T> List<T> readTransactionalAll(String query, SqlRowAdapter<T> adapter) {
+        try (SqlConnection connection = source.getConnection()) {
+            connection.addModifier(SqlConnectionModifier.TRANSACTION);
+            connection.addModifier(SqlConnectionModifier.TRANSACTION_READ_COMMITED);
+            connection.addModifier(SqlConnectionModifier.READ_ONLY);
+            try (SqlTransaction transaction = connection.createTransaction()) {
+                try (PreparedStatementWrapper statement = connection.prepareStatement(query);
+                     ResultSetWrapper resultSet = statement.query()) {
+                    final List<T> result = adapter.many(resultSet);
+                    transaction.commit();
+                    return result;
+                } catch (SQLException e) {
+                    transaction.rollback();
+                    throw e;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
+    public <T> List<T> readTransactionalAll(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
+        try (SqlConnection connection = source.getConnection()) {
+            connection.addModifier(SqlConnectionModifier.TRANSACTION);
+            connection.addModifier(SqlConnectionModifier.TRANSACTION_READ_COMMITED);
+            connection.addModifier(SqlConnectionModifier.READ_ONLY);
+            try (SqlTransaction transaction = connection.createTransaction()) {
+                try (PreparedStatementWrapper statement = connection.prepareStatement(query);
+                     ResultSetWrapper resultSet = statement.query()) {
+                    consumer.accept(statement);
+                    final List<T> result = adapter.many(resultSet);
+                    transaction.commit();
+                    return result;
+                } catch (SQLException e) {
+                    transaction.rollback();
+                    throw e;
+                }
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @Override
     public void setDataSourceWrapper(DataSourceWrapper dataSourceWrapper) {
         this.source = dataSourceWrapper;
+    }
+
+    @Override
+    public void close() {
+        source.close();
     }
 }

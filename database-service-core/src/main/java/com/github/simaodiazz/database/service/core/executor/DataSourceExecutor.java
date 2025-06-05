@@ -10,7 +10,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 import java.util.function.Consumer;
 
-public interface DataSourceExecutor extends DataSourceTransactionExecutor, DataSourceWrapperAware {
+public interface DataSourceExecutor extends DataSourceTransactionExecutor, DataSourceWrapperAware, AutoCloseable {
 
     void write(String query);
 
@@ -20,13 +20,13 @@ public interface DataSourceExecutor extends DataSourceTransactionExecutor, DataS
 
     Future<Void> writeAsync(String query, Consumer<PreparedStatementWrapper> consumer);
 
-    <T> Optional<T> read(String query, SqlRowAdapter<T> adapter);
+    <T> Optional<T> readOptional(String query, SqlRowAdapter<T> adapter);
 
-    <T> CompletableFuture<Optional<T>> readAsync(String query, SqlRowAdapter<T> adapter);
+    <T> CompletableFuture<Optional<T>> readOptionalAsync(String query, SqlRowAdapter<T> adapter);
 
-    <T> Optional<T> read(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer);
+    <T> Optional<T> readOptional(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer);
 
-    <T> CompletableFuture<Optional<T>> readAsync(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer);
+    <T> CompletableFuture<Optional<T>> readOptionalAsync(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer);
 
     <T> List<T> readAll(String query, SqlRowAdapter<T> adapter);
 
@@ -35,5 +35,8 @@ public interface DataSourceExecutor extends DataSourceTransactionExecutor, DataS
     <T> List<T> readAll(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer);
 
     <T> CompletableFuture<List<T>> readAllAsync(String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer);
+
+    @Override
+    void close();
 
 }
