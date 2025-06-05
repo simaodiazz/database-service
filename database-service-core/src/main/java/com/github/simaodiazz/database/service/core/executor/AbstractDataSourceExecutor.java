@@ -1,6 +1,7 @@
 package com.github.simaodiazz.database.service.core.executor;
 
 import com.github.simaodiazz.database.service.core.adapter.SqlRowAdapter;
+import com.github.simaodiazz.database.service.core.manager.SqlConnectionTransactionThreadLocalContextManager;
 import com.github.simaodiazz.database.service.core.transaction.SqlTransaction;
 import com.github.simaodiazz.database.service.core.wrapper.DataSourceWrapper;
 import com.github.simaodiazz.database.service.core.wrapper.PreparedStatementWrapper;
@@ -70,12 +71,12 @@ public abstract class AbstractDataSourceExecutor implements DataSourceExecutor {
 	}
 
 	@Override
-	public <T> List<T> readAll(String query, SqlRowAdapter<T> adapter) {
+	public <T> CollectionResult<T> readAll(String query, SqlRowAdapter<T> adapter) {
 		try (SqlConnection connection = source.getConnection()) {
 			connection.addModifier(SqlConnectionModifier.READ_ONLY);
 			try (PreparedStatementWrapper statement = connection.prepareStatement(query);
 					ResultSetWrapper resultSet = statement.query()) {
-				return adapter.many(resultSet);
+				return new CollectionResult<>(adapter.many(resultSet));
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -83,14 +84,15 @@ public abstract class AbstractDataSourceExecutor implements DataSourceExecutor {
 	}
 
 	@Override
-	public <T> List<T> readAll(
+	public <T> CollectionResult<T> readAll(
 			String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
 		try (SqlConnection connection = source.getConnection()) {
 			connection.addModifier(SqlConnectionModifier.READ_ONLY);
 			try (PreparedStatementWrapper statement = connection.prepareStatement(query);
 					ResultSetWrapper resultSet = statement.query()) {
 				consumer.accept(statement);
-				return adapter.many(resultSet);
+				final List<T> list = adapter.many(resultSet);
+				return new CollectionResult<>(list);
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);
@@ -105,9 +107,11 @@ public abstract class AbstractDataSourceExecutor implements DataSourceExecutor {
 				try (PreparedStatementWrapper statement = connection.prepareStatement(query)) {
 					statement.execute();
 				} catch (SQLException e) {
+					SqlConnectionTransactionThreadLocalContextManager.remove();
 					transaction.rollback();
 					throw e;
 				}
+				SqlConnectionTransactionThreadLocalContextManager.remove();
 			}
 		} catch (SQLException e) {
 			throw new RuntimeException(e);

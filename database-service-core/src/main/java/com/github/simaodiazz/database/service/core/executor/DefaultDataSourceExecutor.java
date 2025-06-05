@@ -6,7 +6,6 @@ import com.github.simaodiazz.database.service.core.configuration.SqlConfiguratio
 import com.github.simaodiazz.database.service.core.transaction.SqlTransaction;
 import com.github.simaodiazz.database.service.core.wrapper.DataSourceWrapper;
 import com.github.simaodiazz.database.service.core.wrapper.PreparedStatementWrapper;
-import java.util.List;
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
@@ -38,7 +37,8 @@ public final class DefaultDataSourceExecutor extends AbstractDataSourceExecutor 
 
 	@Override
 	public CompletableFuture<Void> writeAsync(String query) {
-		if (asyncEnabled) return CompletableFuture.runAsync(() -> write(query), executorService);
+		if (asyncEnabled)
+			return CompletableFuture.runAsync(() -> write(query), executorService);
 		throw new UnsupportedOperationException();
 	}
 
@@ -68,14 +68,15 @@ public final class DefaultDataSourceExecutor extends AbstractDataSourceExecutor 
 	}
 
 	@Override
-	public <T> CompletableFuture<List<T>> readAllAsync(String query, SqlRowAdapter<T> adapter) {
+	public <T> CompletableFuture<CollectionResult<T>> readAllAsync(
+			String query, SqlRowAdapter<T> adapter) {
 		if (asyncEnabled)
 			return CompletableFuture.supplyAsync(() -> readAll(query, adapter), executorService);
 		throw new UnsupportedOperationException();
 	}
 
 	@Override
-	public <T> CompletableFuture<List<T>> readAllAsync(
+	public <T> CompletableFuture<CollectionResult<T>> readAllAsync(
 			String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer) {
 		if (asyncEnabled)
 			return CompletableFuture.supplyAsync(
