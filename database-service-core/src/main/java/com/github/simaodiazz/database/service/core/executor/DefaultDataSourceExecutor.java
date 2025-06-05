@@ -18,16 +18,19 @@ public final class DefaultDataSourceExecutor extends AbstractDataSourceExecutor 
 	private final boolean asyncEnabled;
 	private ExecutorService executorService;
 
-	public DefaultDataSourceExecutor(SqlConfiguration configuration, DataSourceWrapper source) {
+	public DefaultDataSourceExecutor(
+			SqlConfiguration sqlDataSourceExecutorConfiguration, DataSourceWrapper source) {
 		super(source);
 
-		final boolean asyncEnabled =
-				configuration.getPropertyOrDefault(SqlConfigurationKeys.Executor.Async.ENABLE_ASYNC);
-		this.asyncEnabled = asyncEnabled;
+		this.asyncEnabled =
+				sqlDataSourceExecutorConfiguration.getPropertyOrDefault(
+						SqlConfigurationKeys.Executor.Async.ENABLE_ASYNC);
 
-		if (asyncEnabled) {
+		sqlDataSourceExecutorConfiguration.getProperties().keySet().forEach(System.out::println);
+
+		if (this.asyncEnabled) {
 			final int maxThreadPoolSize =
-					configuration.getPropertyOrDefault(
+					sqlDataSourceExecutorConfiguration.getPropertyOrDefault(
 							SqlConfigurationKeys.Executor.Async.MAX_THREAD_POOL_SIZE);
 			executorService = Executors.newFixedThreadPool(maxThreadPoolSize);
 		}

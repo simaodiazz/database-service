@@ -3,12 +3,13 @@ package com.github.simaodiazz.database.service.plugin;
 import com.github.simaodiazz.database.service.core.configuration.SqlConfiguration;
 import com.github.simaodiazz.database.service.core.executor.DataSourceExecutor;
 import com.github.simaodiazz.database.service.core.factory.DataSourceExecutorFactory;
-import com.github.simaodiazz.database.service.plugin.configuration.adapter.SqlFileConfigurationAdapter;
+import com.github.simaodiazz.database.service.plugin.configuration.adapter.SqlDataSourceExecutorFileConfigurationAdapter;
+import com.github.simaodiazz.database.service.plugin.configuration.adapter.SqlDataSourceWrapperFileConfigurationAdapter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.plugin.ServicePriority;
 import org.bukkit.plugin.java.JavaPlugin;
 
-public class DatabaseServicePlugin extends JavaPlugin {
+public final class DatabaseServicePlugin extends JavaPlugin {
 
 	private DataSourceExecutor executor;
 
@@ -20,10 +21,15 @@ public class DatabaseServicePlugin extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		final FileConfiguration fileConfiguration = getConfig();
-		final SqlConfiguration sqlConfiguration =
-				SqlFileConfigurationAdapter.getInstance().adapt(fileConfiguration);
+		final SqlConfiguration dataSourceWrapperConfiguration =
+				SqlDataSourceWrapperFileConfigurationAdapter.getInstance().adapt(fileConfiguration);
 
-		executor = DataSourceExecutorFactory.create(sqlConfiguration);
+		final SqlConfiguration dataSourceExecutorConfiguration =
+				SqlDataSourceExecutorFileConfigurationAdapter.getInstance().adapt(fileConfiguration);
+
+		executor =
+				DataSourceExecutorFactory.create(
+						dataSourceWrapperConfiguration, dataSourceExecutorConfiguration);
 
 		getServer()
 				.getServicesManager()

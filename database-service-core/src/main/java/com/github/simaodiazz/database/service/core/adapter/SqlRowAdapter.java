@@ -11,7 +11,7 @@ public interface SqlRowAdapter<T> {
 
 	default List<T> many(ResultSetWrapper resultSet) {
 		final List<T> list = new ArrayList<>();
-		while (resultSet.next()) single(resultSet).ifPresent(list::add);
+		while (resultSet.hasNext()) single(resultSet).ifPresent(list::add);
 		return list;
 	}
 }

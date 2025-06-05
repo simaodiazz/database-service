@@ -1,17 +1,19 @@
 plugins {
     id 'java'
     alias libs.plugins.spotless
-    alias libs.plugins.plugin.yaml
 }
 
-group = 'com.github.simaodiazz'
-version = '1.0.0-SNAPSHOT'
-
 apply from: 'gradle/vars/spotless.gradle'
-apply from: 'gradle/vars/plugin-yml.gradle'
 
 allprojects {
+    group = 'com.github.simaodiazz'
+    version = '1.0.0-SNAPSHOT'
+
     repositories {
         mavenCentral()
     }
+}
+
+subprojects {
+    apply plugin: 'java'
 }

@@ -4,15 +4,10 @@ public interface SqlConfigurationKeys {
 
 	/** Settings for Data Source, is the connection pool normally */
 	interface DataSource extends SqlConfigurationKeys {
-		/** HikariDataSource is the default provider */
-		SqlConfigurationKey<String> PROVIDER =
-				new SqlConfigurationKey.PrimitiveSqlConfigurationKey<>(
-						"dataSourceProvider", String.class, "HikariDataSource");
-
 		interface Hikari extends DataSource {
-			SqlConfigurationKey<String> DRIVER =
+			SqlConfigurationKey<String> DRIVER_CLASS_NAME =
 					new SqlConfigurationKey.PrimitiveSqlConfigurationKey<>(
-							"driver", String.class, "org.h2.Driver");
+							"driverClassName", String.class, "org.h2.Driver");
 			SqlConfigurationKey<String> JDBC_URL =
 					new SqlConfigurationKey.PrimitiveSqlConfigurationKey<>(
 							"jdbcUrl", String.class, "jdbc:h2:mem:test;DB_CLOSE_DELAY=-1");

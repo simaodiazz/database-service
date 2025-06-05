@@ -1,31 +1,47 @@
 package com.github.simaodiazz.database.service.plugin.configuration.adapter;
 
 import com.github.simaodiazz.database.service.core.configuration.SqlConfiguration;
+import com.github.simaodiazz.database.service.core.configuration.SqlConfigurationKey;
 import com.github.simaodiazz.database.service.core.configuration.adapter.SqlConfigurationAdapter;
-import com.github.simaodiazz.database.service.plugin.configuration.MapDrivenSqlFileConfiguration;
 import org.bukkit.configuration.file.FileConfiguration;
 
-public final class SqlFileConfigurationAdapter
+public abstract class SqlFileConfigurationAdapter
 		implements SqlConfigurationAdapter<FileConfiguration> {
 
-	private static final SqlFileConfigurationAdapter INSTANCE;
-
-	static {
-		INSTANCE = new SqlFileConfigurationAdapter();
+	protected <K> void setIfPresent(SqlConfiguration config, SqlConfigurationKey<K> key, K value) {
+		if (value == null) return;
+		config.setProperty(key, value);
 	}
 
-	@Override
-	public SqlConfiguration adapt(FileConfiguration fileConfiguration) {
-		final SqlConfiguration sqlConfiguration = new SqlConfiguration();
-
-		MapDrivenSqlFileConfiguration.FIELDS.keySet().stream()
-				.filter(fileConfiguration::contains)
-				.forEach(MapDrivenSqlFileConfiguration.FIELDS::get);
-
-		return sqlConfiguration;
+	protected void setIfPresentInt(
+			SqlConfiguration config,
+			SqlConfigurationKey<Integer> key,
+			FileConfiguration fc,
+			String path) {
+		if (fc.contains(path)) {
+			int val = fc.getInt(path);
+			if (val < 1) val = key.standard();
+			config.setProperty(key, val);
+		}
 	}
 
-	public static SqlFileConfigurationAdapter getInstance() {
-		return INSTANCE;
+	protected void setIfPresentLong(
+			SqlConfiguration config, SqlConfigurationKey<Long> key, FileConfiguration fc, String path) {
+		if (fc.contains(path)) {
+			long val = fc.getLong(path);
+			if (val < 1) val = key.standard();
+			config.setProperty(key, val);
+		}
+	}
+
+	protected void setIfPresentBoolean(
+			SqlConfiguration config,
+			SqlConfigurationKey<Boolean> key,
+			FileConfiguration fc,
+			String path) {
+		if (fc.contains(path)) {
+			boolean val = fc.getBoolean(path);
+			config.setProperty(key, val);
+		}
 	}
 }

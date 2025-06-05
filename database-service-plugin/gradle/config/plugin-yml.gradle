@@ -1,6 +1,6 @@
 bukkit {
     name = 'database-service-plugin'
-    main = 'com.github.simaodiazz.database.service.DatabaseServicePlugin'
+    main = 'com.github.simaodiazz.database.service.plugin.DatabaseServicePlugin'
     description = 'Plugin to manage database connections and supplies a helpful service.'
     version = project.version
     apiVersion = '1.8.8'

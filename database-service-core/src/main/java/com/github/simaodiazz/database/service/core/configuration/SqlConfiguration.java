@@ -15,6 +15,10 @@ public final class SqlConfiguration {
 		this.properties = properties;
 	}
 
+	public void setProperty(String key, String value) {
+		properties.put(key, value);
+	}
+
 	public <T> void setProperty(SqlConfigurationKey<T> key, T value) {
 		Objects.requireNonNull(key);
 

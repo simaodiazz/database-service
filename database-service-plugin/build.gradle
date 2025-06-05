@@ -1,9 +1,10 @@
 plugins {
-    id 'java'
+    alias libs.plugins.shadow
+    alias libs.plugins.plugin.yaml
 }
 
-group = 'com.github.simaodiazz'
-version = '1.0.0-SNAPSHOT'
+apply from: 'gradle/config/shadow.gradle'
+apply from: 'gradle/config/plugin-yml.gradle'
 
 repositories {
     maven {
@@ -15,4 +16,5 @@ repositories {
 dependencies {
     implementation project(':database-service-core')
     compileOnly libs.bundles.spigot
+    implementation 'org.jetbrains:annotations:23.0.0'
 }
