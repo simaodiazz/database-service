@@ -1,20 +1,19 @@
 plugins {
     id 'java'
     alias libs.plugins.spotless
-    alias libs.plugins.plugin.yaml
-    alias libs.plugins.shadow
 }
 
-group = 'com.github.simaodiazz'
-version = '1.0.0-SNAPSHOT'
-
-// Configuration for spotless
 apply from: 'gradle/vars/spotless.gradle'
-apply from: 'gradle/vars/plugin-yml.gradle'
-apply from: 'gradle/vars/shadow.gradle'
 
-dependencies {
-    compileOnly libs.bundles.spigot
-    implementation libs.bundles.database
-    implementation libs.gson
+allprojects {
+    group = 'com.github.simaodiazz'
+    version = '1.0.0-SNAPSHOT'
+
+    repositories {
+        mavenCentral()
+    }
+}
+
+subprojects {
+    apply plugin: 'java'
 }
