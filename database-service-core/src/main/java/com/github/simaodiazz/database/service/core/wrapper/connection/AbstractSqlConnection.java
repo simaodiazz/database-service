@@ -1,6 +1,6 @@
 package com.github.simaodiazz.database.service.core.wrapper.connection;
 
-import com.github.simaodiazz.database.service.core.manager.SqlConnectionTransactionThreadLocalContextManager;
+import com.github.simaodiazz.database.service.core.manager.SqlConnectionThreadLocalContextManager;
 import com.github.simaodiazz.database.service.core.transaction.DefaultSqlTransaction;
 import com.github.simaodiazz.database.service.core.transaction.SqlTransaction;
 import com.github.simaodiazz.database.service.core.wrapper.DefaultPreparedStatementWrapper;
@@ -39,7 +39,7 @@ public abstract class AbstractSqlConnection implements SqlConnection {
 
 	@Override
 	public SqlTransaction createTransaction() {
-		SqlConnectionTransactionThreadLocalContextManager.set(this);
+		SqlConnectionThreadLocalContextManager.set(this);
 		return new DefaultSqlTransaction(this);
 	}
 

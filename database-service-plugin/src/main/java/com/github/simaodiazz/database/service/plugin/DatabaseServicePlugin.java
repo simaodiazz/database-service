@@ -34,6 +34,14 @@ public final class DatabaseServicePlugin extends JavaPlugin {
 		getServer()
 				.getServicesManager()
 				.register(DataSourceExecutor.class, executor, this, ServicePriority.Highest);
+
+		executor.writeTransactional((transaction) -> {
+			executor.write(
+					"CREATE TABLE IF NOT EXISTS `test` (`id` INT NOT NULL, `name` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`) );");
+
+			executor.write(
+					"CREATE TABLE IF NOT EXISTS `test2` (`id` INT NOT NULL, `name` VARCHAR(255) NOT NULL, PRIMARY KEY (`id`) );");
+		});
 	}
 
 	@Override

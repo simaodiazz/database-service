@@ -7,18 +7,18 @@ import java.util.Properties;
 public final class HikariDataSourceWrapper extends AbstractDataSourceWrapper<HikariDataSource> {
 
 	public HikariDataSourceWrapper() {
-		this.source = new HikariDataSource();
+		this.s = new HikariDataSource();
 	}
 
 	public HikariDataSourceWrapper(final Properties properties) {
 		final HikariConfig config = new HikariConfig(properties);
-		this.source = new HikariDataSource(config);
+		this.s = new HikariDataSource(config);
 	}
 
 	@Override
 	public void close() {
 		try {
-			source.close();
+			s.close();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}

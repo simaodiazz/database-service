@@ -11,7 +11,7 @@ public interface SqlConnection extends AutoCloseable {
 
 	void addModifier(SqlConnectionModifier modifier);
 
-	PreparedStatementWrapper prepareStatement(String sql) throws SQLException;
+	PreparedStatementWrapper prepareStatement(String sql);
 
 	SqlTransaction createTransaction();
 

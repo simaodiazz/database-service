@@ -38,10 +38,6 @@ public interface DataSourceExecutor extends DataSourceWrapperAware, AutoCloseabl
 	<T> CompletableFuture<CollectionResult<T>> readAllAsync(
 			String query, SqlRowAdapter<T> adapter, Consumer<PreparedStatementWrapper> consumer);
 
-	void writeTransactional(String query, Consumer<SqlTransaction> statement);
-
-	CompletableFuture<Void> writeTransactionalAsync(String query, Consumer<SqlTransaction> statement);
-
 	@Override
 	void close();
 }

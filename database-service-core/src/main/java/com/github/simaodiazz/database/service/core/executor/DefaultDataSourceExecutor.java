@@ -3,7 +3,6 @@ package com.github.simaodiazz.database.service.core.executor;
 import com.github.simaodiazz.database.service.core.adapter.SqlRowAdapter;
 import com.github.simaodiazz.database.service.core.configuration.SqlConfiguration;
 import com.github.simaodiazz.database.service.core.configuration.SqlConfigurationKeys;
-import com.github.simaodiazz.database.service.core.transaction.SqlTransaction;
 import com.github.simaodiazz.database.service.core.wrapper.DataSourceWrapper;
 import com.github.simaodiazz.database.service.core.wrapper.PreparedStatementWrapper;
 import java.util.Optional;
@@ -81,15 +80,6 @@ public final class DefaultDataSourceExecutor extends AbstractDataSourceExecutor 
 		if (asyncEnabled)
 			return CompletableFuture.supplyAsync(
 					() -> readAll(query, adapter, consumer), executorService);
-		throw new UnsupportedOperationException();
-	}
-
-	@Override
-	public CompletableFuture<Void> writeTransactionalAsync(
-			String query, Consumer<SqlTransaction> statement) {
-		if (asyncEnabled)
-			return CompletableFuture.runAsync(
-					() -> writeTransactional(query, statement), executorService);
 		throw new UnsupportedOperationException();
 	}
 }
