@@ -1,8 +1,0 @@
-tasks.shadowJar {
-    archiveBaseName = "database-service-plugin"
-    archiveVersion = ''
-    archiveClassifier = ''
-
-    var pluginsFolder = file("/home/simaodiazz/Documentos/Servidor Minecraft/plugins")
-    destinationDirectory = pluginsFolder
-}

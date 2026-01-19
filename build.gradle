@@ -3,17 +3,22 @@ plugins {
     alias libs.plugins.spotless
 }
 
-apply from: 'gradle/vars/spotless.gradle'
+group = 'com.github.simaodiazz'
+version = '1.0.0-SNAPSHOT'
 
-allprojects {
-    group = 'com.github.simaodiazz'
-    version = '1.0.0-SNAPSHOT'
-
-    repositories {
-        mavenCentral()
-    }
+dependencies {
+    implementation("com.zaxxer:HikariCP:4.0.3")
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
 }
 
-subprojects {
-    apply plugin: 'java'
+spotless {
+    java {
+        googleJavaFormat()
+        target('database-service-plugin/**/*.java', 'database-service-core/**/*.java')
+        removeUnusedImports()
+        endWithNewline()
+        trimTrailingWhitespace()
+        indentWithTabs(2)
+    }
 }
